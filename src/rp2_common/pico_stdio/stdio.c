@@ -29,6 +29,10 @@
 #include "pico/stdio_semihosting.h"
 #endif
 
+#if LIB_PICO_STDIO_RTT
+#include "pico/stdio_rtt.h"
+#endif
+
 static stdio_driver_t *drivers;
 static stdio_driver_t *filter;
 
@@ -275,6 +279,10 @@ void stdio_init_all(void) {
 
 #if LIB_PICO_STDIO_USB
     stdio_usb_init();
+#endif
+
+#if LIB_PICO_STDIO_RTT
+    stdio_rtt_init();
 #endif
 }
 

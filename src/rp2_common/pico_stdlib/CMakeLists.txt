@@ -4,6 +4,8 @@ option(PICO_STDIO_UART "Globablly enable stdio UART" 1)
 option(PICO_STDIO_USB "Globablly enable stdio USB" 0)
 # PICO_CMAKE_CONFIG: PICO_STDIO_USB, OPTIONS: Globally enable stdio semihosting, default=0, group=pico_stdlib
 option(PICO_STDIO_USB "Globablly enable stdio semihosting " 0)
+# PICO_CMAKE_CONFIG: PICO_STDIO_RTT, OPTIONS: Globally enable stdio RTT, default=0, group=pico_stdlib
+option(PICO_STDIO_RTT "Globablly enable stdio RTT " 0)
 
 if (NOT TARGET pico_stdlib)
     pico_add_impl_library(pico_stdlib)
@@ -30,6 +32,10 @@ if (NOT TARGET pico_stdlib)
         set_target_properties(${TARGET} PROPERTIES PICO_TARGET_STDIO_SEMIHOSTING ${ENABLED})
     endfunction()
 
+    function(pico_enable_stdio_rtt TARGET ENABLED)
+        set_target_properties(${TARGET} PROPERTIES PICO_TARGET_STDIO_RTT ${ENABLED})
+    endfunction()
+
     if (TARGET pico_stdio_uart)
         target_link_libraries(pico_stdlib INTERFACE $<IF:$<BOOL:$<IF:$<STREQUAL:$<TARGET_PROPERTY:PICO_TARGET_STDIO_UART>,>,${PICO_STDIO_UART},$<TARGET_PROPERTY:PICO_TARGET_STDIO_UART>>>,pico_stdio_uart,>)
     endif()
@@ -40,6 +46,10 @@ if (NOT TARGET pico_stdlib)
 
     if (TARGET pico_stdio_semihosting)
         target_link_libraries(pico_stdlib INTERFACE $<IF:$<BOOL:$<IF:$<STREQUAL:$<TARGET_PROPERTY:PICO_TARGET_STDIO_SEMIHOSTING>,>,${PICO_STDIO_SEMIHOSTING},$<TARGET_PROPERTY:PICO_TARGET_STDIO_SEMIHOSTING>>>,pico_stdio_semihosting,>)
+    endif()
+
+    if (TARGET pico_stdio_rtt)
+        target_link_libraries(pico_stdlib INTERFACE $<IF:$<BOOL:$<IF:$<STREQUAL:$<TARGET_PROPERTY:PICO_TARGET_STDIO_RTT>,>,${PICO_STDIO_RTT},$<TARGET_PROPERTY:PICO_TARGET_STDIO_RTT>>>,pico_stdio_rtt,>)
     endif()
 
 endif()
